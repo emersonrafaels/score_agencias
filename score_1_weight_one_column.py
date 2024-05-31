@@ -1,6 +1,7 @@
 from utils import score_functions
 from utils.pandas_functions import load_data
 
+
 def orchestra_score(dir_data):
     # NOME DA COLUNA QUE RECEBERÁ A QUANTIDADE COM PESOS
     column_quantity_weight = "Quantidade Peso"
@@ -40,7 +41,7 @@ def orchestra_score(dir_data):
         normalize_to_high_score=True,
         name_column_value=column_quantity_weight,
         name_column_result=name_column_result_score,
-        list_columns_group_result=["Agência"]
+        list_columns_group_result=["Agência"],
     )
 
     return df_result_score

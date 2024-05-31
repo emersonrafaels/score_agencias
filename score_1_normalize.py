@@ -3,7 +3,6 @@ from utils.pandas_functions import load_data
 
 
 def orchestra_score(dir_data):
-
     # OBTENDO OS DADOS
     df = load_data(dir_data=dir_data)
 
@@ -12,7 +11,7 @@ def orchestra_score(dir_data):
         df=df,
         aggregation_type="size",
         list_columns_group="Agência",
-        name_column_result="Quantidade"
+        name_column_result="Quantidade",
     )
 
     # OBTENDO O SCORE

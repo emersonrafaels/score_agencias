@@ -3,6 +3,7 @@ from loguru import logger
 
 from utils import normalization_functions
 
+
 def group_dataframe(
     df,
     list_columns_group,
@@ -73,7 +74,9 @@ def group_dataframe(
                 aggregation_type,
                 list_columns_group,
                 column_to_aggregate,
-                name_column_result))
+                name_column_result,
+            )
+        )
 
     return df_group
 
@@ -82,44 +85,44 @@ def apply_weight(
     row, column_value=None, column_weight=None, weight_false=1, weight_true=1
 ):
     """
-        APLICA UM PESO ESPECÍFICO A UM VALOR DE COLUNA
-        BASEADO EM UMA CONDIÇÃO ESPECIFICADA POR OUTRA COLUNA.
+    APLICA UM PESO ESPECÍFICO A UM VALOR DE COLUNA
+    BASEADO EM UMA CONDIÇÃO ESPECIFICADA POR OUTRA COLUNA.
 
-        A FUNÇÃO VERIFICA SE AS COLUNAS ESPECIFICADAS
-        EXISTEM E APLICA OS PESOS CORRESPONDENTES
-        BASEADO NO VALOR BOOLEANO DA COLUNA DE PESO.
+    A FUNÇÃO VERIFICA SE AS COLUNAS ESPECIFICADAS
+    EXISTEM E APLICA OS PESOS CORRESPONDENTES
+    BASEADO NO VALOR BOOLEANO DA COLUNA DE PESO.
 
-        # Arguments
-            row                  - Required: A linha do DataFrame ou um
-                                             dicionário contendo os dados (pd.Series | dict)
-            column_value         - Optional: O nome da coluna cujo
-                                             valor será ponderado (str)
-            column_weight        - Optional: O nome da coluna que determina
-                                             se o peso 'weight_true' ou 'weight_false'
-                                             será aplicado (str)
-            weight_false         - Optional: O peso a ser aplicado se o valor
-                                             em 'column_weight' é falso ou
-                                             corresponde a uma string que
-                                             representa falso (1 por padrão)
-                                             (int | float)
-            weight_true          - Optional: O peso a ser aplicado se o valor
-                                              em 'column_weight'
-                                              é verdadeiro (1 por padrão)
-                                              (int | float)
+    # Arguments
+        row                  - Required: A linha do DataFrame ou um
+                                         dicionário contendo os dados (pd.Series | dict)
+        column_value         - Optional: O nome da coluna cujo
+                                         valor será ponderado (str)
+        column_weight        - Optional: O nome da coluna que determina
+                                         se o peso 'weight_true' ou 'weight_false'
+                                         será aplicado (str)
+        weight_false         - Optional: O peso a ser aplicado se o valor
+                                         em 'column_weight' é falso ou
+                                         corresponde a uma string que
+                                         representa falso (1 por padrão)
+                                         (int | float)
+        weight_true          - Optional: O peso a ser aplicado se o valor
+                                          em 'column_weight'
+                                          é verdadeiro (1 por padrão)
+                                          (int | float)
 
-        # Returns:
-            weighted_value       - Required: O valor ponderado resultante ou None
-                                              se ocorrer um erro ou
-                                              se as colunas especificadas
-                                              não existirem (float | None)
+    # Returns:
+        weighted_value       - Required: O valor ponderado resultante ou None
+                                          se ocorrer um erro ou
+                                          se as colunas especificadas
+                                          não existirem (float | None)
 
-        # Example:
-            row = pd.Series({'Age': 25, 'Member': 'Yes'})
-            result = apply_weight(row, column_value='Age',
-                                  column_weight='Member',
-                                  weight_false=0.8,
-                                  weight_true=1.2)
-            print(result)  # Saída esperada: 30.0
+    # Example:
+        row = pd.Series({'Age': 25, 'Member': 'Yes'})
+        result = apply_weight(row, column_value='Age',
+                              column_weight='Member',
+                              weight_false=0.8,
+                              weight_true=1.2)
+        print(result)  # Saída esperada: 30.0
     """
 
     # VERIFICANDO SE A COLUNA ESTÁ NAS COLUNAS DO ROW
@@ -180,10 +183,12 @@ def get_score(
 
     if list_columns_group_result:
         # AGRUPANDO OS DADOS
-        df = group_dataframe(df=df,
-                             aggregation_type="mean",
-                             list_columns_group=list_columns_group_result,
-                             name_column_result=name_column_result,
-                             column_to_aggregate=name_column_result)
+        df = group_dataframe(
+            df=df,
+            aggregation_type="mean",
+            list_columns_group=list_columns_group_result,
+            name_column_result=name_column_result,
+            column_to_aggregate=name_column_result,
+        )
 
     return df
