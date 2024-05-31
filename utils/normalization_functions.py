@@ -1,21 +1,24 @@
 from utils.generic_functions import check_none
 
-
 @check_none
 def normalize_to_high_score(values):
+
     """
-    Normaliza uma lista de valores de modo que o menor valor receba a maior pontuação (10).
-    Valores mais altos recebem pontuações mais baixas em uma escala de 0 a 10.
+        NORMALIZA UMA LISTA DE VALORES DE MODO
+        QUE O MENOR VALOR RECEBA A MAIOR PONTUAÇÃO (10).
 
-    # Arguments:
-        values (list): Lista de valores numéricos a serem normalizados.
+        VALORES MAIS ALTOS RECEBEM PONTUAÇÕES
+        MAIS BAIXAS EM UMA ESCALA DE 0 A 10.
 
-    # Returns:
-        list: Lista de valores normalizados onde o menor valor recebe a pontuação máxima (10).
+        # Arguments
+            values              - Required: Lista de valores numéricos a serem normalizados (List[int | float])
 
-    Exemplo:
-        >>> normalize_to_high_score([10, 20, 15, 5, 30])
-        [8.0, 4.0, 6.0, 10.0, 0.0]
+        # Returns:
+            normalized_values   - Required: Lista de valores normalizados onde o menor valor recebe a pontuação máxima (10) (List[float])
+
+        # Example:
+            >>> normalize_to_high_score([10, 20, 15, 5, 30])
+            [8.0, 4.0, 6.0, 10.0, 0.0]
     """
 
     max_val = max(values)
@@ -27,20 +30,25 @@ def normalize_to_high_score(values):
 
 @check_none
 def normalize_to_low_score(values):
+
     """
-    Normaliza uma lista de valores de modo que o menor valor receba a menor pontuação (0).
-    Valores mais altos recebem pontuações mais altas em uma escala de 0 a 10.
+        NORMALIZA UMA LISTA DE VALORES DE MODO
+        QUE O MENOR VALOR RECEBA A MENOR PONTUAÇÃO (0).
 
-    # Arguments:
-        values (list): Lista de valores numéricos a serem normalizados.
+        VALORES MAIS ALTOS RECEBEM PONTUAÇÕES
+        MAIS ALTAS EM UMA ESCALA DE 0 A 10.
 
-    # Returns:
-        list: Lista de valores normalizados onde o menor valor recebe a pontuação mínima (0).
+        # Arguments
+            values              - Required: Lista de valores numéricos a serem normalizados (List[int | float])
 
-    Exemplo:
-        >>> normalize_to_low_score([10, 20, 15, 5, 30])
-        [2.0, 6.0, 4.0, 0.0, 10.0]
+        # Returns:
+            normalized_values   - Required: Lista de valores normalizados onde o menor valor recebe a pontuação mínima (0) (List[float])
+
+        # Example:
+            >>> normalize_to_low_score([10, 20, 15, 5, 30])
+            [2.0, 6.0, 4.0, 0.0, 10.0]
     """
+
     max_val = max(values)
     min_val = min(values)
     if max_val == min_val:

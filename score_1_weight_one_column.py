@@ -1,26 +1,5 @@
-import pandas as pd
-
 from utils import score_functions
-
-def load_data(dir_data):
-    """
-    LÊ OS DADOS DO ARQUIVO EXCEL E RETORNA UM DATAFRAME.
-
-    # Arguments
-            dir_data                     - Required: Diretório onde estão
-                                                     os dados (str | Path)
-
-    # Returns:
-            df                           - Required: Dataframe contendo os
-                                                     dados carregados
-                                                     (pd.DataFrame)
-    """
-
-    # Lendo os dados
-    df = pd.read_excel(dir_data)
-
-    return df
-
+from utils.pandas_functions import load_data
 
 def orchestra_score(dir_data):
     # NOME DA COLUNA QUE RECEBERÁ A QUANTIDADE COM PESOS
