@@ -140,6 +140,51 @@ def apply_weight(
     return column_value
 
 
+def apply_weights(
+    row,
+    column_value=None,
+    weights={},
+):
+    """
+    APLICA UM PESO ESPECÍFICO A UM VALOR DE COLUNA
+    BASEADO EM UMA CONDIÇÃO ESPECIFICADA POR OUTRA COLUNA.
+
+    A FUNÇÃO VERIFICA SE AS COLUNAS ESPECIFICADAS
+    EXISTEM E APLICA OS PESOS CORRESPONDENTES
+    BASEADO NO VALOR BOOLEANO DA COLUNA DE PESO.
+
+    # Arguments
+        row                  - Required: A linha do DataFrame ou um
+                                         dicionário contendo os dados (pd.Series | dict)
+        column_value         - Optional: O nome da coluna cujo
+                                         valor será ponderado (str)
+        weights              - Optional: Dict contendo todos os pesos
+                                         que serão aplicados.
+                                         O padrão do dict é: (Dict)
+
+    # Returns:
+        weighted_value       - Required: O valor ponderado resultante ou None
+                                          se ocorrer um erro ou
+                                          se as colunas especificadas
+                                          não existirem (float | None)
+
+    # Example:
+
+    """
+
+    # VERIFICANDO SE WEIGHTS É UM DICT
+    if isinstance(weights, dict):
+        # VERIFICANDO SE A FOI PASSADO UMA ROW DO TIPO SERIES OU DICT
+        if isinstance(row, (pd.Series, dict)):
+            # VERIFICANDO SE AS COLUNAS DE VOLUME ESTÁ NO DATAFRAME
+            if column_value in row:
+                # PERCORRENDO CADA UMA DAS COLUNAS DO DICT WEIGHT
+                for key, value in weights.items():
+                    print(key, value)
+
+    return column_value
+
+
 def get_score(
     df,
     normalize_to_high_score=False,
