@@ -1,10 +1,30 @@
-from utils import score_functions
+from model_score import score_functions
 from utils.pandas_functions import load_data
+
+from model_score.score import Score
+
+def declare_weights():
+    # INSTANCIANDO A CLASSE DE SCORE
+    score = Score()
+
+    # DECLARANDO OS PESOS ANTES/DEPOIS DA REFORMA
+    weights_reforma = {
+        "column": "Depois da Reforma",
+        "categories": {"Sim": 0.7, "Não": 0.3},
+    }
+
+    # SALVANDO TODOS OS PESOS INICIALIZADOS NA VARIÁVEL DE PESOS
+    _ = score.insert(weights_reforma)
+
+    return score
 
 
 def orchestra_score(dir_data):
+    # DECLARANDO A VARIÁVEL DE PESOS
+    score = declare_weights()
+
     # NOME DA COLUNA QUE RECEBERÁ A QUANTIDADE COM PESOS
-    column_quantity_weight = "Quantidade Peso"
+    column_quantity_weight = "Resultado Ponderado"
 
     # NOME DA COLUNA QUE RECEBERÁ O SCORE CALCULADO
     name_column_result_score = "Score"
@@ -20,17 +40,12 @@ def orchestra_score(dir_data):
         name_column_result="Quantidade",
     )
 
-    # APLICANDO PESOS DIFERENTES PARA A COLUNA DEPOIS DA REFORMA
-    # ANTES = PESO 0.3
-    # DEPOIS = PES 0.7
-
+    # APLICANDO OS PESOS
     df_group[column_quantity_weight] = df_group.apply(
-        lambda row: score_functions.apply_weight(
+        lambda row: score_functions.apply_weights(
             row,
             column_value="Quantidade",
-            column_weight="Depois da Reforma",
-            weight_false=0.3,
-            weight_true=0.7,
+            weights=score.weights,
         ),
         axis=1,
     )

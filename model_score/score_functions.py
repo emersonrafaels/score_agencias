@@ -1,7 +1,7 @@
 import pandas as pd
 from loguru import logger
 
-from utils import normalization_functions
+from model_score import normalization_functions
 
 
 def group_dataframe(
@@ -172,17 +172,23 @@ def apply_weights(
 
     """
 
+    # INICIANDO A VARIÁVEL DE RETORNO
+    result = 1
+
     # VERIFICANDO SE WEIGHTS É UM DICT
     if isinstance(weights, dict):
-        # VERIFICANDO SE A FOI PASSADO UMA ROW DO TIPO SERIES OU DICT
+        # VERIFICANDO SE FOI PASSADO UMA ROW DO TIPO SERIES OU DICT
         if isinstance(row, (pd.Series, dict)):
             # VERIFICANDO SE AS COLUNAS DE VOLUME ESTÁ NO DATAFRAME
             if column_value in row:
                 # PERCORRENDO CADA UMA DAS COLUNAS DO DICT WEIGHT
                 for key, value in weights.items():
-                    print(key, value)
+                    # VERIFICANDO SE A COLUNA CONSTA NA LINHA
+                    if key in row:
+                        # result = column_value*value_weight
+                        result *= (row.get(column_value, 0)) * (value.get(row[key], 0))
 
-    return column_value
+    return result
 
 
 def get_score(
@@ -215,16 +221,11 @@ def get_score(
                                                    scores normalizados (pd.DataFrame)
     """
 
-    if normalize_to_high_score:
-        # VALORES MENOR -> MAIORES NOTAS
-        df[name_column_result] = normalization_functions.normalize_to_high_score(
-            df[name_column_value]
-        )
-    else:
-        # VALORES MENOR -> MENORES NOTAS
-        df[name_column_result] = normalization_functions.normalize_to_low_score(
-            df[name_column_value]
-        )
+    # INICIANDO O DICT QUE ARMAZENA OS RESULTADOS
+    dict_result = {}
+
+    # ARMAZENANDO O DATAFRAME COM OS VALORES PONDERADOS
+    dict_result["DATAFRAME_PONDERADO"] = df.copy()
 
     if list_columns_group_result:
         # AGRUPANDO OS DADOS
@@ -233,7 +234,24 @@ def get_score(
             aggregation_type="mean",
             list_columns_group=list_columns_group_result,
             name_column_result=name_column_result,
-            column_to_aggregate=name_column_result,
+            column_to_aggregate=name_column_value,
         )
+
+    # ARMAZENANDO O DATAFRAME APÓS O GROUPBY
+    dict_result["DATAFRAME_RESULT_GROUP"] = df.copy()
+
+    if normalize_to_high_score:
+        # VALORES MENOR -> MAIORES NOTAS
+        df[name_column_result] = normalization_functions.normalize_to_high_score(
+            df[name_column_result]
+        )
+    else:
+        # VALORES MENOR -> MENORES NOTAS
+        df[name_column_result] = normalization_functions.normalize_to_low_score(
+            df[name_column_result]
+        )
+
+    # ARMAZENANDO O DATAFRAME COM OS VALORES DE PONDERAÇÃO NORMALIZADOS
+    dict_result["DATAFRAME_SCORE"] = df.copy()
 
     return df
