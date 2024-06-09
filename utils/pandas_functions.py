@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def load_data(dir_data):
+def load_data(dir_data, sheetname=0):
     """
     LÊ OS DADOS DO ARQUIVO EXCEL E RETORNA UM DATAFRAME.
 
@@ -16,6 +16,6 @@ def load_data(dir_data):
     """
 
     # Lendo os dados
-    df = pd.read_excel(dir_data)
+    df = pd.read_excel(dir_data, sheet_name=sheetname)
 
     return df
