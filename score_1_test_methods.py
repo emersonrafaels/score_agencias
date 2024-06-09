@@ -2,7 +2,7 @@ from utils.pandas_functions import load_data
 from model_score import score_functions
 from model_score.score import Score
 from model_score.normalization_functions import *
-
+from utils.plot_functions import seaborn_functions
 
 def declare_weights():
     # INSTANCIANDO A CLASSE DE SCORE
@@ -33,10 +33,7 @@ def declare_weights():
     return score
 
 
-def orchestra_score(dir_data,
-                    sheetname=0,
-                    col_name=""):
-
+def orchestra_score(dir_data, sheetname=0, col_name=""):
     # DECLARANDO A VARIÁVEL DE PESOS
     score = declare_weights()
 
@@ -52,31 +49,39 @@ def orchestra_score(dir_data,
     df = load_data(dir_data=dir_data, sheetname=sheetname)
 
     # APLICANDO A NORMALIZAÇÃO
-    df["SCORE_ROBUST_NORM"] = robust_normalizaton(values=df[col_name],
-                                                  option_normalize_to_high_score=normalize_to_high_score)
+    df["SCORE_ROBUST_NORM"] = robust_normalizaton(
+        values=df[col_name], option_normalize_to_high_score=normalize_to_high_score
+    )
 
     # APLICANDO A NORMALIZAÇÃO
-    df["SCORE_NORM"] = normalize_values(values=df[col_name],
-                                        option_normalize_to_high_score=normalize_to_high_score)
+    df["SCORE_NORM"] = normalize_values(
+        values=df[col_name], option_normalize_to_high_score=normalize_to_high_score
+    )
 
     # REMOVENDO OUTLIERS E APLICANDO A NORMALIZAÇÃO
-    df["SCORE_NORM2"] = normalize_data_with_outliers(values=df[col_name],
-                                                     option_normalize_to_high_score=normalize_to_high_score)
+    df["SCORE_NORM2"] = normalize_data_with_outliers(
+        values=df[col_name], option_normalize_to_high_score=normalize_to_high_score
+    )
 
-    df.to_excel(f"normalizaton_high_{str(normalize_to_high_score)}.xlsx",
-                index=None)
+    try:
+        df.to_excel(f"normalizaton_high_{str(normalize_to_high_score)}.xlsx", index=None)
+    except Exception as ex:
+        print(ex)
+
+    # VISUALIZANDO O RESULTADO
+    seaborn_functions.boxplot(df,
+                              ['Custo 2', 'SCORE_NORM',
+                               'SCORE_ROBUST_NORM', 'SCORE_NORM2'],
+                              'Boxplot para Múltiplas Colunas')
 
     return df
 
 
 if __name__ == "__main__":
-
     dir_data = "data/Manutencoes_Agencias.xlsx"
 
     sheetname = "CUSTO"
 
     col_name = "Custo 2"
 
-    _ = orchestra_score(dir_data=dir_data,
-                        sheetname=sheetname,
-                        col_name=col_name)
+    _ = orchestra_score(dir_data=dir_data, sheetname=sheetname, col_name=col_name)

@@ -186,10 +186,10 @@ def apply_weights(
                     # VERIFICANDO SE A COLUNA CONSTA NA LINHA
                     if key in row:
                         # result = column_value*value_weight
-                        result *= (value.get(row[key], 0))
+                        result *= value.get(row[key], 0)
 
                 # result = column_value*value_weight
-                result *= (row.get(column_value, 0))
+                result *= row.get(column_value, 0)
 
     return result
 

@@ -4,7 +4,6 @@ from utils.generic_functions import check_none
 
 
 def calculate_outliers(data, method="IQR"):
-
     """
     Calcula os outliers em um conjunto de dados.
 
@@ -43,7 +42,6 @@ def calculate_outliers(data, method="IQR"):
     upper_outliers = np.max(data)
 
     if method in ["IQR"]:
-
         # CALCULANDO Q1, Q3 E IQR
         Q1 = np.percentile(data, 25)
         Q3 = np.percentile(data, 75)
@@ -86,9 +84,7 @@ def normalize_to_high_score(values):
         return [10 - val for val in values]
 
 
-def robust_normalizaton(values,
-                        option_normalize_to_high_score=False):
-
+def robust_normalizaton(values, option_normalize_to_high_score=False):
     # CONVERTENDO OS DADOS PARA ARRAY NUMPY
     data = np.array(values)
 
@@ -102,8 +98,7 @@ def robust_normalizaton(values,
     valores_normalizados = ((data - median_val) / iqr) * 10
 
     # GARANTINDO DADOS NO INTERVALO 0 A 1
-    valores_normalizados_clipped = np.clip(valores_normalizados, 0,
-                                           10)
+    valores_normalizados_clipped = np.clip(valores_normalizados, 0, 10)
 
     # NORMALIZA OS VALORES NA ESCALA DE 0 A 10
     if option_normalize_to_high_score:
@@ -112,9 +107,7 @@ def robust_normalizaton(values,
         return valores_normalizados_clipped
 
 
-def normalize_values(values,
-                     option_normalize_to_high_score=False):
-
+def normalize_values(values, option_normalize_to_high_score=False):
     # CONVERTENDO OS DADOS PARA ARRAY NUMPY
     data = np.array(values)
 
@@ -134,9 +127,7 @@ def normalize_values(values,
         return (data - min_val) / (max_val - min_val) * 10
 
 
-def normalize_data_with_outliers(values,
-                                 option_normalize_to_high_score=False):
-
+def normalize_data_with_outliers(values, option_normalize_to_high_score=False):
     # CONVERTENDO OS DADOS PARA ARRAY NUMPY
     data = np.array(values)
 
@@ -157,7 +148,9 @@ def normalize_data_with_outliers(values,
     non_outliers = ~lower_outliers & ~upper_outliers
 
     # Normalizar dados não outlier entre 0 e 10
-    normalized_data[non_outliers] = normalize_values(normalized_data[non_outliers],
-                                                     option_normalize_to_high_score=option_normalize_to_high_score)
+    normalized_data[non_outliers] = normalize_values(
+        normalized_data[non_outliers],
+        option_normalize_to_high_score=option_normalize_to_high_score,
+    )
 
     return normalized_data

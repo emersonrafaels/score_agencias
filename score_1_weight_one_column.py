@@ -3,6 +3,7 @@ from utils.pandas_functions import load_data
 
 from model_score.score import Score
 
+
 def declare_weights():
     # INSTANCIANDO A CLASSE DE SCORE
     score = Score()
