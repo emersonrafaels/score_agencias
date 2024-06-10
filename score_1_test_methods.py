@@ -4,6 +4,7 @@ from model_score.score import Score
 from model_score.normalization_functions import *
 from utils.plot_functions import seaborn_functions, plotly_functions
 
+
 def declare_weights():
     # INSTANCIANDO A CLASSE DE SCORE
     score = Score()
@@ -64,22 +65,26 @@ def orchestra_score(dir_data, sheetname=0, col_name=""):
     )
 
     try:
-        df.to_excel(f"normalizaton_high_{str(normalize_to_high_score)}.xlsx", index=None)
+        df.to_excel(
+            f"normalizaton_high_{str(normalize_to_high_score)}.xlsx", index=None
+        )
     except Exception as ex:
         print(ex)
 
     # VISUALIZANDO O RESULTADO
-    seaborn_functions.boxplot(df,
-                              ['Custo 2', 'SCORE_NORM',
-                               'SCORE_ROBUST_NORM', 'SCORE_NORM2'],
-                              'Boxplot para Múltiplas Colunas',
-                              color_points=True)
+    seaborn_functions.boxplot(
+        df,
+        ["Custo 2", "SCORE_NORM", "SCORE_ROBUST_NORM", "SCORE_NORM2"],
+        "Boxplot para Múltiplas Colunas",
+        color_points=True,
+    )
 
-    plotly_functions.boxplot_plotly(df,
-                                    ['Custo 2', 'SCORE_NORM',
-                                     'SCORE_ROBUST_NORM', 'SCORE_NORM2'],
-                                    'Boxplot para Múltiplas Colunas',
-                                    color_points=True)
+    plotly_functions.boxplot_plotly(
+        df,
+        ["Custo 2", "SCORE_NORM", "SCORE_ROBUST_NORM", "SCORE_NORM2"],
+        "Boxplot para Múltiplas Colunas",
+        color_points=True,
+    )
 
     return df
 
