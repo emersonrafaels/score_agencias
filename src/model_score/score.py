@@ -14,6 +14,7 @@ class Weight_Float(BaseModel):
             raise ValueError("Os pesos das categorias devem estar entre 0 e 1.")
         return v
 
+
 class Weight_Str(BaseModel):
     column: str
     categories: Dict[Union[str, bool], str]

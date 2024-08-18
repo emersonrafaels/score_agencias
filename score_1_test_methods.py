@@ -1,8 +1,7 @@
-from utils.pandas_functions import load_data
-from model_score import score_functions
-from model_score.score import Score
-from model_score.normalization_functions import *
-from utils.plot_functions import seaborn_functions, plotly_functions
+from src.utils.pandas_functions import load_data
+from src.model_score.score import Score
+from src.model_score.normalization_functions import *
+from src.utils.plot_functions import seaborn_functions, plotly_functions
 
 
 def declare_weights():

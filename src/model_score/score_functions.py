@@ -1,7 +1,7 @@
 import pandas as pd
 from loguru import logger
 
-from model_score import normalization_functions
+from src.model_score import normalization_functions
 
 
 def group_dataframe(
@@ -185,11 +185,12 @@ def apply_weights(
                 for key, value in weights.items():
                     # VERIFICANDO SE A COLUNA CONSTA NA LINHA
                     if key in row:
-                        # result = column_value*value_weight
-                        result *= value.get(row[key], 0)
-
-                # result = column_value*value_weight
-                result *= row.get(column_value, 0)
+                        # VERIFICANDO SE É UMA VARIÁVEL DE PESO POR TEMPO
+                        if "TEMPO" in list(value.keys()):
+                            pass
+                        else:
+                            # result = column_value*value_weight
+                            result *= value.get(row[key], 0) * row.get(column_value, 0)
 
     return result
 
@@ -205,23 +206,23 @@ def get_score(
     CALCULA O SCORE NORMALIZADO BASEADO EM UMA COLUNA DE VALORES DO DATAFRAME.
 
     # Arguments
-            df                        - Required: Dataframe contendo os dados (pd.DataFrame)
-            normalize_to_high_score   - Required: Define o padrão de normalização (Boolean)
-            name_column_value         - Optional: Nome da coluna do dataframe de
-                                                                          onde os valores serão utilizados
-                                                                          para calcular o score (str)
-            name_column_result        - Optional: Nome da coluna onde os
-                                                                          resultados do score
-                                                                          serão armazenados (str)
-            list_columns_group_result - Optional: Se desejado,
-                                                  realiza o agrupamento das
-                                                  colunas mencionadas após a normalização.
-                                                  Se não for desejado agrupar,
-                                                  manter None (Tuple | List)
+        df                        - Required: Dataframe contendo os dados (pd.DataFrame)
+        normalize_to_high_score   - Required: Define o padrão de normalização (Boolean)
+        name_column_value         - Optional: Nome da coluna do dataframe de
+                                                                      onde os valores serão utilizados
+                                                                      para calcular o score (str)
+        name_column_result        - Optional: Nome da coluna onde os
+                                                                      resultados do score
+                                                                      serão armazenados (str)
+        list_columns_group_result - Optional: Se desejado,
+                                              realiza o agrupamento das
+                                              colunas mencionadas após a normalização.
+                                              Se não for desejado agrupar,
+                                              manter None (Tuple | List)
 
     # Returns:get_score
-            df                         - Required: Dataframe com uma nova coluna de
-                                                   scores normalizados (pd.DataFrame)
+        df                         - Required: Dataframe com uma nova coluna de
+                                               scores normalizados (pd.DataFrame)
     """
 
     # INICIANDO O DICT QUE ARMAZENA OS RESULTADOS

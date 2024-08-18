@@ -1,8 +1,6 @@
-from utils.pandas_functions import load_data
-from model_score import score_functions
-from model_score.score import Score
-from model_score.normalization_functions import *
-from utils.plot_functions import seaborn_functions, plotly_functions
+from src.utils.pandas_functions import load_data
+from src.model_score import score_functions
+from src.model_score.score import Score
 
 
 def transformar_pesos(df):
@@ -114,7 +112,7 @@ def orchestra_score(
     dir_data_weights="",
     sheetname_weights=0,
     validator_group=False,
-    list_columns_group=[]
+    list_columns_group=[],
 ):
     # OBTENDO OS DADOS
     df = load_data(dir_data=dir_data, sheetname=sheetname_data)
@@ -134,59 +132,43 @@ def orchestra_score(
     normalize_to_high_score = True
 
     if validator_group:
-
         # AGRUPANDO OS DADOS
         df_group = score_functions.group_dataframe(
             df=df,
             aggregation_type="size",
-            list_columns_group=["Agência", "Depois da Reforma"],
-            name_column_result="Quantidade",
+            list_columns_group=["AGENCIA", "DATA_VISTORIA", "STATUS"],
+            name_column_result="QUANTIDADE",
         )
+
+    else:
+        df_group = df.copy()
 
     # APLICANDO OS PESOS
     df_group[column_quantity_weight] = df_group.apply(
         lambda row: score_functions.apply_weights(
             row,
-            column_value="Quantidade",
+            column_value="QUANTIDADE",
             weights=score.weights,
         ),
         axis=1,
     )
 
-    # REMOVENDO OUTLIERS E APLICANDO A NORMALIZAÇÃO
-    df["SCORE_NORM2"] = normalize_data_with_outliers(
-        values=df, option_normalize_to_high_score=normalize_to_high_score
+    # OBTENDO O SCORE NORMALIZADO
+    df_result_score = score_functions.get_score(
+        df=df_group,
+        normalize_to_high_score=True,
+        name_column_value=column_quantity_weight,
+        name_column_result=name_column_result_score,
+        list_columns_group_result=["AGENCIA"],
     )
 
-    try:
-        df.to_excel(
-            f"normalizaton_high_{str(normalize_to_high_score)}.xlsx", index=None
-        )
-    except Exception as ex:
-        print(ex)
-
-    # VISUALIZANDO O RESULTADO
-    seaborn_functions.boxplot(
-        df,
-        ["Custo 2", "SCORE_NORM", "SCORE_ROBUST_NORM", "SCORE_NORM2"],
-        "Boxplot para Múltiplas Colunas",
-        color_points=True,
-    )
-
-    plotly_functions.boxplot_plotly(
-        df,
-        ["Custo 2", "SCORE_NORM", "SCORE_ROBUST_NORM", "SCORE_NORM2"],
-        "Boxplot para Múltiplas Colunas",
-        color_points=True,
-    )
-
-    return df
+    return df_result_score
 
 
 if __name__ == "__main__":
     # BASE COM DADOS A SEREM LIDOS
-    dir_data = "data/Bases_Score.xlsx"
-    sheetname_data = "SEGURANCA_VISTORIA_PF"
+    dir_data = r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\Score de Agências\Calculadora_Pesos.xlsx"
+    sheetname_data = "BASE DE DADOS VISTORIA PF STA"
 
     # BASE CONTENDO OS PESOS PARA SCORAR
     dir_data_weights = "data/Bases_Score.xlsx"
@@ -201,5 +183,5 @@ if __name__ == "__main__":
         dir_data_weights=dir_data_weights,
         sheetname_weights=sheetname_weights,
         validator_group=validator_group,
-        list_columns_group=list_columns_group
+        list_columns_group=list_columns_group,
     )

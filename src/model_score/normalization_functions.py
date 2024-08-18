@@ -1,7 +1,5 @@
 import numpy as np
 
-from utils.generic_functions import check_none
-
 
 def calculate_outliers(data, method="IQR"):
     """
