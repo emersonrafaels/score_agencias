@@ -178,3 +178,20 @@ class IndiceConsumo(IndiceConsumoBase):
             # Arredonda o score para o número especificado de casas decimais
             return round(score, casas_decimais)
         return None
+
+    def __str__(self):
+
+        """Retorna a mensagem formatada ao converter a instância em string."""
+
+        if self.ice is not None:
+            if self.ice >= 1:
+                percentual = self.calcular_percentual()
+                return f"O consumo está {percentual:.2f}% acima do ideal para um ICE de {self.ice:.2f}."
+            else:
+                return f"O consumo está dentro do ideal, com um ICE de {self.ice:.2f}."
+
+        elif self.percentual_acima is not None:
+            ice_calculado = self.calcular_ice()
+            return f"Um consumo {self.percentual_acima}% acima do ideal corresponde a um ICE de {ice_calculado:.2f}."
+
+        return "Você deve fornecer o valor de 'ice' ou 'percentual_acima'."
