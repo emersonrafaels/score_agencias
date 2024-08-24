@@ -180,7 +180,6 @@ class IndiceConsumo(IndiceConsumoBase):
         return None
 
     def __str__(self):
-
         """Retorna a mensagem formatada ao converter a instância em string."""
 
         if self.ice is not None:

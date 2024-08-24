@@ -1,5 +1,6 @@
 from src.model_score.modelo_score_indice import IndiceConsumo
 
+
 class ICA(IndiceConsumo):
     """
     Classe específica para o cálculo do Índice de Consumo de Água (ICA).
