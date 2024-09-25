@@ -1,6 +1,6 @@
 from src.utils.pandas_functions import load_data
-from src.model_score.score import Score
-from src.model_score.normalization_functions import *
+from src.models_kpi.model_score.score import Score
+from src.models_kpi.model_score.normalization_functions import *
 from src.utils.plot_functions import seaborn_functions, plotly_functions
 
 
@@ -89,7 +89,7 @@ def orchestra_score(dir_data, sheetname=0, col_name=""):
 
 
 if __name__ == "__main__":
-    dir_data = "data/Manutencoes_Agencias.xlsx"
+    dir_data = "../data/Manutencoes_Agencias.xlsx"
 
     sheetname = "CUSTO"
 

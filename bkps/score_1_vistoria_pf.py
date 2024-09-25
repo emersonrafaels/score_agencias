@@ -1,6 +1,6 @@
 from src.utils.pandas_functions import load_data
-from src.model_score import score_functions
-from src.model_score.score import Score
+from src.models_kpi.model_score import score_functions
+from src.models_kpi.model_score.score import Score
 
 
 def transformar_pesos(df):
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     sheetname_data = "BASE DE DADOS VISTORIA PF STA"
 
     # BASE CONTENDO OS PESOS PARA SCORAR
-    dir_data_weights = "data/Bases_Score.xlsx"
+    dir_data_weights = "../data/Bases_Score.xlsx"
     sheetname_weights = "PESO_VISTORIA_PF"
 
     validator_group = False

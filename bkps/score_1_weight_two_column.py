@@ -1,7 +1,7 @@
-from src.model_score import score_functions
+from src.models_kpi.model_score import score_functions
 from src.utils.pandas_functions import load_data
 
-from src.model_score.score import Score
+from src.models_kpi.model_score.score import Score
 
 
 def declare_weights():
@@ -14,8 +14,21 @@ def declare_weights():
         "categories": {"Sim": 0.7, "Não": 0.3},
     }
 
+    # DECLARANDO OS PESOS POR TIPO DE MANUTENÇÃO
+    weights_tipo_de_manutencao = {
+        "column": "Tipo de Manutenção",
+        "categories": {
+            "Elétrica": 0.25,
+            "Hidráulica": 0.2,
+            "Civil": 0.2,
+            "Ar condicionado": 0.2,
+            "Mecânica": 0.2,
+        },
+    }
+
     # SALVANDO TODOS OS PESOS INICIALIZADOS NA VARIÁVEL DE PESOS
     _ = score.insert(weights_reforma)
+    _ = score.insert(weights_tipo_de_manutencao)
 
     return score
 
@@ -37,7 +50,7 @@ def orchestra_score(dir_data):
     df_group = score_functions.group_dataframe(
         df=df,
         aggregation_type="size",
-        list_columns_group=["Agência", "Depois da Reforma"],
+        list_columns_group=["Agência", "Depois da Reforma", "Tipo de Manutenção"],
         name_column_result="Quantidade",
     )
 
@@ -64,7 +77,7 @@ def orchestra_score(dir_data):
 
 
 if __name__ == "__main__":
-    dir_data = "data/Manutencoes_Agencias.xlsx"
+    dir_data = "../data/Manutencoes_Agencias.xlsx"
 
     df_result_score = orchestra_score(dir_data=dir_data)
 
