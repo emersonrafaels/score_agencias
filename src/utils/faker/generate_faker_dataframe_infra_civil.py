@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 
@@ -77,7 +79,9 @@ def generate_dataframe_score_view():
     })
 
     # Mostrando as primeiras linhas
-    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\result\PERFORMANCE\INFRA_CIVIL\BASE_SCORE_INFRA_CIVIL.xlsx", index=None)
+    df.to_excel(str(Path(Path(__file__).parent.parent.parent.parent,
+                         r"data\result\PERFORMANCE\INFRA_CIVIL\BASE_SCORE_INFRA_CIVIL.xlsx")),
+                index=None)
 
 if __name__ == '__main__':
     generate_dataframe_score_view()

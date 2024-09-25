@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 
@@ -75,8 +77,10 @@ def generate_dataframe_esg_score_view():
         'FAROL_TEMA': farol_tema
     })
 
-    # Mostrando as primeiras linhas
-    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\result\ESG\ESG\BASE_SCORE_ESG.xlsx", index=None)
+    # GERANDO O DATAFRAME RESULTADO
+    df.to_excel(str(Path(Path(__file__).parent.parent.parent.parent,
+                r"data\result\ESG\ESG\BASE_SCORE_ESG.xlsx")),
+                index=None)
 
 if __name__ == '__main__':
     generate_dataframe_esg_score_view()
