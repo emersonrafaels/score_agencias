@@ -34,6 +34,7 @@ def execute_calc_ica_score():
         (1.0, 0.0, 10.0, 2),  # Teste padrão
         (1.3, 0.0, 10.0, 2),  # Teste padrão
         (1.2, 0.0, 10.0, 2),  # Teste padrão
+		(2.5, 0.0, 10.0, 2),  # Teste padrão
         (1.3, 7.123, 7.5, 3),  # Teste com arredondamento específico
     ]
 
