@@ -77,7 +77,7 @@ def generate_dataframe_score_view():
     })
 
     # Mostrando as primeiras linhas
-    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\performance\AA\AA_01_09_2024.xlsx", index=None)
+    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\result\PERFORMANCE\AB\BASE_SCORE_AB.xlsx", index=None)
 
 if __name__ == '__main__':
     generate_dataframe_score_view()

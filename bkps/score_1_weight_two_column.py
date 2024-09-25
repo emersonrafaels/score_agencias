@@ -1,7 +1,7 @@
-from src.models_kpi.model_score import score_functions
+from src.models.models_kpi.model_score import score_functions
 from src.utils.pandas_functions import load_data
 
-from src.models_kpi.model_score.score import Score
+from src.models.models_kpi.model_score.score import Score
 
 
 def declare_weights():

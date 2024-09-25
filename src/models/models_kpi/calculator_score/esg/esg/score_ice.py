@@ -1,4 +1,4 @@
-from src.models_kpi.model_score.modelo_score_indice import IndiceConsumo
+from src.models.models_kpi.model_score.modelo_score_indice import IndiceConsumo
 
 
 class ICE(IndiceConsumo):

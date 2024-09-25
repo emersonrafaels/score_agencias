@@ -1,7 +1,7 @@
 import pandas as pd
 from loguru import logger
 
-from src.models_kpi.model_score import normalization_functions
+from src.models.models_kpi.model_score import normalization_functions
 
 
 def group_dataframe(

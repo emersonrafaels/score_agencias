@@ -44,9 +44,9 @@ def generate_dataframe_score_view():
     ano = 2024
 
     # Definindo pesos
-    peso_ocorrencias = 0.4
-    peso_recorrencias = 0.6
-    peso_mttr = 0.0
+    peso_ocorrencias = 0.2
+    peso_recorrencias = 0.7
+    peso_mttr = 0.1
 
     # DEFININDO O SCORE DO TEMA
     score_tema = score_tema = np.average([score_ocorrencias, score_recorrencias, score_mttr],
@@ -77,7 +77,7 @@ def generate_dataframe_score_view():
     })
 
     # Mostrando as primeiras linhas
-    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\result\PERFORMANCE\INFRA_CIVIL\BASE_SCORE_INFRA_CIVIL.xlsx", index=None)
+    df.to_excel(r"C:\Users\Emerson\Desktop\Itaú\Comunidade Infra de Canais Físicos\Projetos\IBS 360\data\result\PERFORMANCE\AA\BASE_SCORE_AA.xlsx", index=None)
 
 if __name__ == '__main__':
     generate_dataframe_score_view()

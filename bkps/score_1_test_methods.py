@@ -1,6 +1,6 @@
 from src.utils.pandas_functions import load_data
-from src.models_kpi.model_score.score import Score
-from src.models_kpi.model_score.normalization_functions import *
+from src.models.models_kpi.model_score.score import Score
+from src.models.models_kpi.model_score.normalization_functions import *
 from src.utils.plot_functions import seaborn_functions, plotly_functions
 
 

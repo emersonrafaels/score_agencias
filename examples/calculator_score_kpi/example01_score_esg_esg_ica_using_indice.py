@@ -1,4 +1,4 @@
-from src.models_kpi.calculator_score.esg.esg.score_ica import ICA
+from src.models.models_kpi.calculator_score.esg.esg.score_ica import ICA
 
 
 def calc_ica_score_using_indice(indice, minimo, maximo, casas_decimais):
