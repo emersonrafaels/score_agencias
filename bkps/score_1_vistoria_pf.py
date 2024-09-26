@@ -1,4 +1,4 @@
-from src.utils.pandas_functions import load_data
+from src.utils.pandas_functions import load_data_auto
 from src.models.models_kpi.model_score import score_functions
 from src.models.models_kpi.model_score.score import Score
 
@@ -115,10 +115,10 @@ def orchestra_score(
     list_columns_group=[],
 ):
     # OBTENDO OS DADOS
-    df = load_data(dir_data=dir_data, sheetname=sheetname_data)
+    df = load_data_auto(dir_data=dir_data, sheetname=sheetname_data)
 
     # OBTENDO OS PESOS
-    df_weights = load_data(dir_data=dir_data_weights, sheetname=sheetname_weights)
+    df_weights = load_data_auto(dir_data=dir_data_weights, sheetname=sheetname_weights)
 
     # DECLARANDO A VARIÁVEL DE PESOS
     score = declare_weights(df_weights)

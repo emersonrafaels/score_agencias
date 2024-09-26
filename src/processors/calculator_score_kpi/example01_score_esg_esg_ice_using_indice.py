@@ -1,5 +1,6 @@
 from src.models.models_kpi.calculator_score.esg.esg.score_ice import ICE
 
+
 def calc_ice_score(indice, minimo, maximo, casas_decimais):
     """
     Realiza o cálculo do score para ICE.

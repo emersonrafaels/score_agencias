@@ -1,5 +1,5 @@
 from src.models.models_kpi.model_score import score_functions
-from src.utils.pandas_functions import load_data
+from src.utils.pandas_functions import load_data_auto
 
 from src.models.models_kpi.model_score.score import Score
 
@@ -44,7 +44,7 @@ def orchestra_score(dir_data):
     name_column_result_score = "Score"
 
     # OBTENDO OS DADOS
-    df = load_data(dir_data=dir_data)
+    df = load_data_auto(dir_data=dir_data)
 
     # AGRUPANDO OS DADOS
     df_group = score_functions.group_dataframe(

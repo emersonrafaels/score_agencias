@@ -3,18 +3,21 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
+
 # Função para definir o farol baseado no score
 def definir_farol(score):
     if score <= 4:
-        return 'VERMELHO'
+        return "VERMELHO"
     elif score <= 8:
-        return 'AMARELO'
+        return "AMARELO"
     else:
-        return 'VERDE'
+        return "VERDE"
+
 
 # Função para gerar Score com base nos consumos e limites estabelecidos
 def calcular_score(consumo, max_consumo):
     return max(0, 10 - (consumo / max_consumo) * 10)
+
 
 def generate_dataframe_esg_score_view():
     # Parâmetros de geração de dados
@@ -50,37 +53,48 @@ def generate_dataframe_esg_score_view():
     peso_fluidos = 0.6
 
     # DEFININDO O SCORE DO TEMA
-    score_tema = np.average([score_agua, score_energia, score_fluidos],
-                            axis=0,
-                            weights=[peso_agua, peso_energia, peso_fluidos])
+    score_tema = np.average(
+        [score_agua, score_energia, score_fluidos],
+        axis=0,
+        weights=[peso_agua, peso_energia, peso_fluidos],
+    )
     farol_tema = [definir_farol(s) for s in score_tema]
 
     # Criando o DataFrame
-    df = pd.DataFrame({
-        'CD_PONTO': cd_ponto,
-        'DIA': [dia]*len(cd_ponto),
-        'MES': [mes]*len(cd_ponto),
-        'ANO': [ano]*len(cd_ponto),
-        'CONSUMO_AGUA': consumo_agua,
-        'SCORE_AGUA': score_agua,
-        'FAROL_AGUA': farol_agua,
-        'PESO_AGUA': peso_agua,
-        'CONSUMO_ENERGIA': consumo_energia,
-        'SCORE_ENERGIA': score_energia,
-        'FAROL_ENERGIA': farol_energia,
-        'PESO_ENERGIA': peso_energia,
-        'EMISSAO_FLUIDOS': emissao_fluidos,
-        'SCORE_FLUIDOS': score_fluidos,
-        'FAROL_FLUIDOS': farol_fluidos,
-        'PESO_FLUIDOS': peso_fluidos,
-        'SCORE_TEMA': score_tema,
-        'FAROL_TEMA': farol_tema
-    })
+    df = pd.DataFrame(
+        {
+            "CD_PONTO": cd_ponto,
+            "DIA": [dia] * len(cd_ponto),
+            "MES": [mes] * len(cd_ponto),
+            "ANO": [ano] * len(cd_ponto),
+            "CONSUMO_AGUA": consumo_agua,
+            "SCORE_AGUA": score_agua,
+            "FAROL_AGUA": farol_agua,
+            "PESO_AGUA": peso_agua,
+            "CONSUMO_ENERGIA": consumo_energia,
+            "SCORE_ENERGIA": score_energia,
+            "FAROL_ENERGIA": farol_energia,
+            "PESO_ENERGIA": peso_energia,
+            "EMISSAO_FLUIDOS": emissao_fluidos,
+            "SCORE_FLUIDOS": score_fluidos,
+            "FAROL_FLUIDOS": farol_fluidos,
+            "PESO_FLUIDOS": peso_fluidos,
+            "SCORE_TEMA": score_tema,
+            "FAROL_TEMA": farol_tema,
+        }
+    )
 
     # GERANDO O DATAFRAME RESULTADO
-    df.to_excel(str(Path(Path(__file__).parent.parent.parent.parent,
-                r"data\result\ESG\ESG\BASE_SCORE_ESG.xlsx")),
-                index=None)
+    df.to_excel(
+        str(
+            Path(
+                Path(__file__).parent.parent.parent.parent,
+                r"data\result\ESG\ESG\BASE_SCORE_ESG.xlsx",
+            )
+        ),
+        index=None,
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     generate_dataframe_esg_score_view()

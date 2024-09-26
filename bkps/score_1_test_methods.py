@@ -1,4 +1,4 @@
-from src.utils.pandas_functions import load_data
+from src.utils.pandas_functions import load_data_auto
 from src.models.models_kpi.model_score.score import Score
 from src.models.models_kpi.model_score.normalization_functions import *
 from src.utils.plot_functions import seaborn_functions, plotly_functions
@@ -46,7 +46,7 @@ def orchestra_score(dir_data, sheetname=0, col_name=""):
     normalize_to_high_score = True
 
     # OBTENDO OS DADOS
-    df = load_data(dir_data=dir_data, sheetname=sheetname)
+    df = load_data_auto(dir_data=dir_data, sheetname=sheetname)
 
     # APLICANDO A NORMALIZAÇÃO
     df["SCORE_ROBUST_NORM"] = robust_normalizaton(

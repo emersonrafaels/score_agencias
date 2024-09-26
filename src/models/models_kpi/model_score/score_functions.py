@@ -118,11 +118,11 @@ def apply_weight(
 
     # Example:
         row = pd.Series({'Age': 25, 'Member': 'Yes'})
-        result = apply_weight(row, column_value='Age',
+        data_tema = apply_weight(row, column_value='Age',
                               column_weight='Member',
                               weight_false=0.8,
                               weight_true=1.2)
-        print(result)  # Saída esperada: 30.0
+        print(data_tema)  # Saída esperada: 30.0
     """
 
     # VERIFICANDO SE A COLUNA ESTÁ NAS COLUNAS DO ROW
@@ -189,7 +189,7 @@ def apply_weights(
                         if "TEMPO" in list(value.keys()):
                             pass
                         else:
-                            # result = column_value*value_weight
+                            # data_tema = column_value*value_weight
                             result *= value.get(row[key], 0) * row.get(column_value, 0)
 
     return result
