@@ -1,6 +1,7 @@
 import pandas as pd
 from .weights import Weights
 
+
 class ScoreGlobalCalculator:
     """
     Classe para calcular o score global combinado a partir de várias categorias de scores de pilares.
@@ -28,7 +29,7 @@ class ScoreGlobalCalculator:
         self.dia = dia
         self.mes = mes
         self.ano = ano
-        self.score_pilar = self.calculate_score_global()
+        self.score_global = self.calculate_score_global()
 
     def calculate_score_global(self):
         """
@@ -50,8 +51,13 @@ class ScoreGlobalCalculator:
             farol_col = f"{category}_FAROL"
 
             # Renomeando a coluna de score e farol
-            df.rename(columns={detail.score_column: score_col,
-                               detail.farol_column: farol_col}, inplace=True)
+            df.rename(
+                columns={
+                    detail.score_column: score_col,
+                    detail.farol_column: farol_col,
+                },
+                inplace=True,
+            )
 
             # Obtendo o peso do pilar
             df[peso_col] = detail.weight

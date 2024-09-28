@@ -5,13 +5,25 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 import typer
 
-from src.models.models_pilar.performance.performance_calculator import (
+from src.models.models_pilar.score_pilar_performance.performance_calculator import (
     ScorePilarPerformance,
 )
-from src.models.models_pilar.performance.models import ScoreDetails
+from src.models.models_pilar.score_pilar_performance.models import ScoreDetails
 from src.utils.pandas_functions import load_data_auto, save_data_auto
 
+# Instanciando o typer
 app = typer.Typer()
+
+# Definindo o peso default dos temas
+default_weight = 1 / 3
+default_weight_rounded = round(1 / 3, 2)
+
+def adjust_default_weights(weights, default_weight, default_weight_rounded):
+    # Verifica se todos os pesos são iguais ao peso padrão arredondado
+    if all(weight == default_weight_rounded for weight in weights):
+        # Define todos os pesos para o valor padrão não arredondado
+        return (default_weight,) * len(weights)
+    return weights
 
 
 @app.command()
@@ -28,53 +40,83 @@ def main(
     output_file: str = typer.Option(
         "BASE_SCORE_PILAR_PERFORMANCE.xlsx", help="Nome do arquivo de saída."
     ),
+    include_aa: bool = typer.Option(default=True, help="Incluir scores de AA"),
+    include_ab: bool = typer.Option(default=True, help="Incluir scores de AB"),
+    include_infra: bool = typer.Option(
+        default=True, help="Incluir scores de Infra Civil"
+    ),
+    weight_aa: float = typer.Option(
+        default=default_weight_rounded, help="Peso para scores de AA"
+    ),
+    weight_ab: float = typer.Option(
+        default=default_weight_rounded, help="Peso para scores de AB"
+    ),
+    weight_infra: float = typer.Option(
+        default=default_weight_rounded, help="Peso para scores de Infra Civil"
+    ),
 ):
-    # Carregando os dataframes
-    df_aa = load_data_auto(Path(input_dir, "AA", "BASE_SCORE_AA.xlsx"))
-    df_ab = load_data_auto(Path(input_dir, "AB", "BASE_SCORE_AB.xlsx"))
-    df_infra_civil = load_data_auto(
-        Path(input_dir, "INFRA_CIVIL", "BASE_SCORE_INFRA_CIVIL.xlsx")
-    )
+    details_list = []
 
-    details_list = [
-        ScoreDetails(
-            dataframe=df_aa,
-            score_column="SCORE_TEMA",
-            weight=0.3,
-            category="AA",
-        ),
-        ScoreDetails(
-            dataframe=df_ab,
-            score_column="SCORE_TEMA",
-            weight=0.5,
-            category="AB",
-        ),
-        ScoreDetails(
-            dataframe=df_infra_civil,
-            score_column="SCORE_TEMA",
-            weight=0.2,
-            category="INFRA_CIVIL",
-        ),
-    ]
+    # Obtendo o peso default padrão
+    weights = adjust_default_weights([weight_aa, weight_ab, weight_infra],
+                                     default_weight, default_weight_rounded)
 
-    # Extraindo uma data comum dos dados, assumindo uniformidade
-    dia = df_aa["DIA"].iloc[0]
-    mes = df_aa["MES"].iloc[0]
-    ano = df_aa["ANO"].iloc[0]
+    weight_aa, weight_ab, weight_infra = weights
 
-    # Calculando o score pilar
-    score_calculator = ScorePilarPerformance(
-        details_list=details_list, dia=dia, mes=mes, ano=ano
-    )
-    score_pilar_df = score_calculator.score_pilar
+    if include_aa:
+        df_aa = load_data_auto(Path(input_dir, "AA", "BASE_SCORE_AA.xlsx"))
+        details_list.append(
+            ScoreDetails(
+                dataframe=df_aa,
+                score_column="SCORE_TEMA",
+                weight=weight_aa,
+                category="AA",
+            )
+        )
+    if include_ab:
+        df_ab = load_data_auto(Path(input_dir, "AB", "BASE_SCORE_AB.xlsx"))
+        details_list.append(
+            ScoreDetails(
+                dataframe=df_ab,
+                score_column="SCORE_TEMA",
+                weight=weight_ab,
+                category="AB",
+            )
+        )
+    if include_infra:
+        df_infra_civil = load_data_auto(
+            Path(input_dir, "INFRA_CIVIL", "BASE_SCORE_INFRA_CIVIL.xlsx")
+        )
+        details_list.append(
+            ScoreDetails(
+                dataframe=df_infra_civil,
+                score_column="SCORE_TEMA",
+                weight=weight_infra,
+                category="INFRA_CIVIL",
+            )
+        )
 
-    # Criando o diretório de output
-    output_path = output_dir / output_file
-    output_dir.mkdir(parents=True, exist_ok=True)
+    if not details_list:
+        typer.echo("Nenhuma categoria de score foi selecionada. Encerrando execução.")
+        raise typer.Exit()
 
-    save_data_auto(dataframe=score_pilar_df, file_path=output_path)
+    if details_list:
+        # Assumindo uniformidade nas datas entre os pilares
+        dia = details_list[0].dataframe["DIA"].iloc[0]
+        mes = details_list[0].dataframe["MES"].iloc[0]
+        ano = details_list[0].dataframe["ANO"].iloc[0]
 
-    typer.echo(f"Scores calculados e salvos com sucesso em {output_path}")
+        score_calculator = ScorePilarPerformance(
+            details_list=details_list, dia=dia, mes=mes, ano=ano
+        )
+        df_score_pilar = score_calculator.score_pilar
+
+        output_path = output_dir / output_file
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        save_data_auto(dataframe=df_score_pilar, file_path=output_path)
+
+        typer.echo(f"Scores calculados e salvos com sucesso em {output_path}")
 
 
 if __name__ == "__main__":

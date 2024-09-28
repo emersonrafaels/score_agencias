@@ -12,7 +12,9 @@ __data_atualizacao__ = "26/09/2024"
 from pathlib import Path
 from loguru import logger
 
-from src.models.models_global.score_global.global_calculator import ScoreGlobalCalculator
+from src.models.models_global.score_global.global_calculator import (
+    ScoreGlobalCalculator,
+)
 from src.models.models_global.score_global.models import ScoreDetails
 from src.utils.pandas_functions import load_data_auto, save_data_auto
 
@@ -66,11 +68,13 @@ def main_execute_score_performance():
     ano = df_tema_esg["ANO"].iloc[0]
 
     # Calculando o score pilar
-    score_calculator = ScoreGlobalCalculator(details_list=details_list, dia=dia, mes=mes, ano=ano)
-    score_pilar_df = score_calculator.score_pilar
+    score_calculator = ScoreGlobalCalculator(
+        details_list=details_list, dia=dia, mes=mes, ano=ano
+    )
+    df_score_global = score_calculator.score_global
 
     save_data_auto(
-        dataframe=score_pilar_df,
+        dataframe=df_score_global,
         file_path=Path(dir_root, "data/data_global", "BASE_SCORE_GLOBAL.xlsx"),
         index=False,
     )
