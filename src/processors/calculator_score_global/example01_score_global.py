@@ -12,10 +12,8 @@ __data_atualizacao__ = "26/09/2024"
 from pathlib import Path
 from loguru import logger
 
-from src.models.models_pilar.score_pilar_performance.performance_calculator import (
-    ScorePilarPerformance,
-)
-from src.models.models_pilar.score_pilar_performance.models import ScoreDetails
+from src.models.models_global.score_global.global_calculator import ScoreGlobalCalculator
+from src.models.models_global.score_global.models import ScoreDetails
 from src.utils.pandas_functions import load_data_auto, save_data_auto
 
 
@@ -35,53 +33,45 @@ def main_execute_score_performance():
         None
     """
     dir_root = Path(Path(__file__).parent.parent.parent.parent)
-    dir_root_performance = Path(dir_root, "data/data_tema/PERFORMANCE")
+    dir_root_pilar = Path(dir_root, "data/data_pilar")
 
     # Carregando os dataframes
-    df_aa = load_data_auto(Path(dir_root_performance, "AA", "BASE_SCORE_AA.xlsx"))
-    df_ab = load_data_auto(Path(dir_root_performance, "AB", "BASE_SCORE_AB.xlsx"))
-    df_infra_civil = load_data_auto(
-        Path(dir_root_performance, "INFRA_CIVIL", "BASE_SCORE_INFRA_CIVIL.xlsx")
+    df_tema_esg = load_data_auto(
+        Path(dir_root_pilar, "ESG", "BASE_SCORE_TEMA_ESG.xlsx")
+    )
+    df_tema_performance = load_data_auto(
+        Path(dir_root_pilar, "PERFORMANCE", "BASE_SCORE_TEMA_PERFORMANCE.xlsx")
     )
 
     details_list = [
         ScoreDetails(
-            dataframe=df_aa,
-            score_column="SCORE_TEMA",
+            dataframe=df_tema_esg,
+            score_column="SCORE_PILAR",
+            farol_column="FAROL_PILAR",
+            weight=0.7,
+            category="ESG",
+        ),
+        ScoreDetails(
+            dataframe=df_tema_performance,
+            score_column="SCORE_PILAR",
+            farol_column="FAROL_PILAR",
             weight=0.3,
-            category="AA",
-        ),
-        ScoreDetails(
-            dataframe=df_ab,
-            score_column="SCORE_TEMA",
-            weight=0.5,
-            category="AB",
-        ),
-        ScoreDetails(
-            dataframe=df_infra_civil,
-            score_column="SCORE_TEMA",
-            weight=0.2,
-            category="INFRA_CIVIL",
+            category="PERFORMANCE",
         ),
     ]
 
     # Extraindo uma data comum dos dados, assumindo uniformidade
-    dia = df_aa["DIA"].iloc[0]
-    mes = df_aa["MES"].iloc[0]
-    ano = df_aa["ANO"].iloc[0]
+    dia = df_tema_esg["DIA"].iloc[0]
+    mes = df_tema_esg["MES"].iloc[0]
+    ano = df_tema_esg["ANO"].iloc[0]
 
     # Calculando o score pilar
-    score_calculator = ScorePilarPerformance(
-        details_list=details_list, dia=dia, mes=mes, ano=ano
-    )
+    score_calculator = ScoreGlobalCalculator(details_list=details_list, dia=dia, mes=mes, ano=ano)
     score_pilar_df = score_calculator.score_pilar
 
-    # Salvando os dados após a aplicação do engine do score
     save_data_auto(
         dataframe=score_pilar_df,
-        file_path=Path(
-            dir_root, "data/data_pilar/PERFORMANCE", "BASE_SCORE_TEMA_PERFORMANCE.xlsx"
-        ),
+        file_path=Path(dir_root, "data/data_global", "BASE_SCORE_GLOBAL.xlsx"),
         index=False,
     )
 

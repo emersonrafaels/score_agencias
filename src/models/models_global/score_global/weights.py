@@ -13,18 +13,18 @@ from pydantic import BaseModel, validator
 
 
 class Weights(BaseModel):
-	"""
+    """
     Classe Weights usada para validar se a soma dos pesos em uma lista de pesos é igual a 1.0.
 
     Attributes:
         weights (list): Lista de pesos numéricos que devem somar 1.0.
     """
 
-	weights: list
+    weights: list
 
-	@validator("weights", pre=True, always=True)
-	def check_weights_sum(cls, v):
-		"""
+    @validator("weights", pre=True, always=True)
+    def check_weights_sum(cls, v):
+        """
         Valida se a soma dos pesos na lista é igual a 1.0.
 
         Arguments:
@@ -36,6 +36,6 @@ class Weights(BaseModel):
         Raises:
             ValueError: Se a soma dos pesos não for igual a 1.0.
         """
-		if sum(v) != 1.0:
-			raise ValueError("A soma dos pesos deve ser igual a 1.0")
-		return v
+        if sum(v) != 1.0:
+            raise ValueError("A soma dos pesos deve ser igual a 1.0")
+        return v

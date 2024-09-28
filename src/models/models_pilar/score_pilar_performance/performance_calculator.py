@@ -1,6 +1,6 @@
 import pandas as pd
-from .models import BaseScore, ScoreDetails
 from .weights import Weights
+
 
 class ScorePilarPerformance:
     """
@@ -37,7 +37,7 @@ class ScorePilarPerformance:
 
         Returns:
             DataFrame: DataFrame com as colunas 'CD_PONTO', 'DIA', 'MES', 'ANO', scores, pesos,
-            faróis de cada categoria, e o score e farol pilar combinado.
+            faróis de cada categoria, e o score e farol pilar.
         """
         df_final = pd.DataFrame()
 
@@ -50,21 +50,59 @@ class ScorePilarPerformance:
             peso_col = f"{category}_PESO"
             farol_col = f"{category}_FAROL"
 
+            # Renomeando a coluna de score
             df.rename(columns={detail.score_column: score_col}, inplace=True)
+
+            # Obtendo o peso do tema
             df[peso_col] = detail.weight
+
+            # Aplicando a função para obter o farol dos temas
             df[farol_col] = df[score_col].apply(self.definir_farol)
 
             # Primeira categoria inicializa o df_final, as subsequentes são mescladas
             if df_final.empty:
-                df_final = df[['CD_PONTO', 'DIA', 'MES', 'ANO', score_col, peso_col, farol_col]]
+                df_final = df[
+                    ["CD_PONTO", "DIA", "MES", "ANO", score_col, peso_col, farol_col]
+                ]
             else:
-                df_final = df_final.merge(df[['CD_PONTO', score_col, peso_col, farol_col]], on='CD_PONTO', how='outer')
+                df_final = df_final.merge(
+                    df[["CD_PONTO", score_col, peso_col, farol_col]],
+                    on="CD_PONTO",
+                    how="outer",
+                )
 
         # Calcular o score pilar ponderado e o farol correspondente
-        df_final['SCORE_PILAR'] = sum(
-            df_final[col] * df_final[col.replace('_SCORE', '_PESO')] for col in df_final.columns if '_SCORE' in col
-        ) / df_final[[col for col in df_final.columns if '_PESO' in col]].sum(axis=1)
-        df_final['FAROL_PILAR'] = df_final['SCORE_PILAR'].apply(self.definir_farol)
+        """
+        1)
+        Iteração: A expressão itera sobre todas as colunas do DataFrame 
+        df_final que contêm a substring "_SCORE" no nome. 
+        Cada col nesse loop é o nome de uma coluna de score de um pilar específico.
+
+        2)
+        Ponderação: Para cada coluna de score identificada, 
+        a expressão col.replace("_SCORE", "_PESO") gera o nome 
+        correspondente da coluna de peso. 
+        Por exemplo, se col é "ESG_SCORE", a expressão gerará "ESG_PESO".
+
+        3)
+        Multiplicação: Cada score individual em df_final[col] é 
+        multiplicado pelo seu peso correspondente em 
+        df_final[col.replace("_SCORE", "_PESO")]. 
+        Isso pondera cada score pelo seu respectivo peso.
+
+        4)
+        Soma: A função sum() agrega todos esses scores ponderados 
+        para cada linha, resultando na soma dos 
+        scores ponderados para cada agência.
+        """
+
+        df_final["SCORE_PILAR"] = sum(
+            df_final[col] * df_final[col.replace("_SCORE", "_PESO")]
+            for col in df_final.columns
+            if "_SCORE" in col
+        ) / df_final[[col for col in df_final.columns if "_PESO" in col]].sum(axis=1)
+
+        df_final["FAROL_PILAR"] = df_final["SCORE_PILAR"].apply(self.definir_farol)
 
         return df_final
 
@@ -80,8 +118,8 @@ class ScorePilarPerformance:
             str: Retorna 'VERMELHO', 'AMARELO' ou 'VERDE' com base no valor do score.
         """
         if score <= 4:
-            return 'VERMELHO'
+            return "VERMELHO"
         elif score <= 8:
-            return 'AMARELO'
+            return "AMARELO"
         else:
-            return 'VERDE'
+            return "VERDE"
