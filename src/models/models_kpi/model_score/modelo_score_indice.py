@@ -165,18 +165,18 @@ class IndiceConsumo(IndiceConsumoBase):
         float: O score calculado com base no índice de consumo, ajustado para a escala mínima e máxima, e arredondado.
         """
         if self.indice is not None:
-            score = self.calcular_valor(self.indice)
+            self.score = self.calcular_valor(self.indice)
 
             # Normaliza o score para a escala mínima e máxima, se fornecida
             if minimo is not None and maximo is not None:
-                score = max(minimo, min(maximo, score))
+                self.score = max(minimo, min(maximo, self.score))
             else:
-                score = min(
-                    max(score, 0), 10
+                self.score = min(
+                    max(self.score, 0), 10
                 )  # Garante que o score esteja entre 0 e 10
 
             # Arredonda o score para o número especificado de casas decimais
-            return round(score, casas_decimais)
+            return round(self.score, casas_decimais)
         return None
 
     def __str__(self):
