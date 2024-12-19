@@ -38,7 +38,9 @@ class ScorePorFaixa:
         self.faixas = sorted(faixas, key=lambda faixa: faixa.limite_inferior)
 
     def calcular_score(
-        self, entrada: float, arredondar: Optional[int] = 2
+        self, entrada: float,
+            arredondar: Optional[int] = 2,
+            model="indisponibilidade"
     ) -> Union[float, None]:
         """
         Calcula o score associado à entrada com base nas faixas definidas.
@@ -50,11 +52,26 @@ class ScorePorFaixa:
         Returns:
         Union[float, None]: O score calculado ou None se a entrada estiver fora das faixas.
         """
-        for faixa in self.faixas:
-            if faixa.limite_inferior <= entrada <= faixa.limite_superior:
-                score = faixa.score_max - (
-                    (entrada - faixa.limite_inferior)
-                    / (faixa.limite_superior - faixa.limite_inferior)
-                ) * (faixa.score_max - faixa.score_min)
-                return round(score, arredondar) if arredondar is not None else score
-        return None  # Fora das faixas definidas
+
+        if model == "indisponibilidade":
+            for faixa in self.faixas:
+                if faixa.limite_inferior <= entrada <= faixa.limite_superior:
+                    score = faixa.score_max - (
+                            (entrada - faixa.limite_inferior)
+                            / (faixa.limite_superior - faixa.limite_inferior)
+                    ) * (faixa.score_max - faixa.score_min)
+                    return round(score,
+                                 arredondar) if arredondar is not None else score
+            return None  # Fora das faixas definidas
+
+        if model == "disponibilidade":
+            for faixa in self.faixas:
+                if faixa.limite_inferior <= entrada <= faixa.limite_superior:
+                    if entrada == faixa.limite_superior and faixa.score_max > faixa.score_min:
+                        return faixa.score_max
+                    score = faixa.score_min + ((entrada - faixa.limite_inferior) / (
+                                faixa.limite_superior - faixa.limite_inferior)) * (
+                                        faixa.score_max - faixa.score_min)
+                    return round(score,
+                                 arredondar) if arredondar is not None else score
+            return None
