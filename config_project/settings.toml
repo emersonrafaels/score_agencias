@@ -1,0 +1,16 @@
+[default]
+
+[default.ICA]
+
+PILAR = "ESG"
+TEMA = "ESG"
+KPI = "CONSUMO DE AGUA"
+INDICADOR = "ICA"
+
+[default.ICA.MODEL]
+
+MODEL = "INDICE"
+PONTO_A = [1.0, 9.0]
+PONTO_B = [1.3, 7.0]
+
+[development]
